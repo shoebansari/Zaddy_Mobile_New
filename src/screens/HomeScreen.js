@@ -1,67 +1,23 @@
 import React from 'react';
 import { ScrollView, StyleSheet, SafeAreaView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/home/Header';
 import NotificationSlider from '../components/home/NotificationSlider';
 import MenuIcon from '../components/home/MenuIcon';
 import HorizontalSlider from '../components/home/HorizontalSlider';
 import ProductList from '../components/home/ProductList';
 import SkinInsight from '../components/home/SkinInsight';
-
+import { fetchCategory } from '../redux/slices/homeSlice';
+import { useEffect } from 'react';
 const HomeScreen = () => {
-  // Sample product data
-  const bestSellers = [
-    {
-      id: 1,
-      name: 'Vitamin C Serum',
-      description: 'Brightening & Anti-aging',
-      price: 29.99,
-      image: 'https://via.placeholder.com/160x160',
-    },
-    {
-      id: 2,
-      name: 'Hyaluronic Acid',
-      description: 'Deep Hydration',
-      price: 24.99,
-      image: 'https://via.placeholder.com/160x160',
-    },
-    // Add more products as needed
-  ];
 
-  const newLaunches = [
-    {
-      id: 1,
-      name: 'Rose Water Toner',
-      description: 'Natural & Refreshing',
-      price: 19.99,
-      image: 'https://via.placeholder.com/160x160',
-    },
-    {
-      id: 2,
-      name: 'Night Cream',
-      description: 'Repair & Nourish',
-      price: 34.99,
-      image: 'https://via.placeholder.com/160x160',
-    },
-    // Add more products as needed
-  ];
+  const dispatch = useDispatch();
+  const { bestSeller,bestRecommended, bestArrial,  isLoader, isError } = useSelector(state => state.homeSlice.categoryList);
 
-  const recommendedProducts = [
-    {
-      id: 1,
-      name: 'Face Moisturizer',
-      description: 'All-day Hydration',
-      price: 27.99,
-      image: 'https://via.placeholder.com/160x160',
-    },
-    {
-      id: 2,
-      name: 'Sunscreen SPF 50',
-      description: 'Broad Spectrum Protection',
-      price: 22.99,
-      image: 'https://via.placeholder.com/160x160',
-    },
-    // Add more products as needed
-  ];
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, [dispatch]);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -70,10 +26,10 @@ const HomeScreen = () => {
         <NotificationSlider />
         <MenuIcon />
         <HorizontalSlider />
-        <ProductList title="Our Best Sellers" products={bestSellers} />
+        <ProductList title="Our Best Sellers" products={bestSeller} />
         <SkinInsight />
-        <ProductList title="New Launches" products={newLaunches} />
-        <ProductList title="Recommended for You" products={recommendedProducts} />
+        <ProductList title="New Launches" products={bestArrial} />
+        <ProductList title="Recommended for You" products={bestRecommended} /> 
       </ScrollView>
     </SafeAreaView>
   );

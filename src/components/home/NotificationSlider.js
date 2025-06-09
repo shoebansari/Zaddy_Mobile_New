@@ -1,91 +1,136 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNotification } from '../../redux/slices/homeSlice';
 
-const { width } = Dimensions.get('window');
+const HorizontalSliderBanner = () => {
+  const dispatch = useDispatch();
+  const notificationList2 = useSelector(state => state.homeSlice);
+  console.log("notificationList2", notificationList2)
+  const { notificationList, isLoader, isError } = useSelector(state => state.homeSlice);
 
-const NotificationSlider = () => {
-  const notifications = [
-    { id: 1, message: '🎉 New Summer Collection is here!' },
-    { id: 2, message: '🔥 Get 20% off on all skincare products' },
-    { id: 3, message: '✨ Free shipping on orders above $50' },
-  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [activeNotifications, setActiveNotifications] = useState([]);
 
-  const flatListRef = useRef(null);
-  const currentIndex = useRef(0);
-
+  console.log("notificationList", notificationList)
+  // Fetch notifications on mount
   useEffect(() => {
-    const scrollInterval = setInterval(() => {
-      if (currentIndex.current < notifications.length - 1) {
-        currentIndex.current += 1;
-      } else {
-        currentIndex.current = 0;
-      }
+    console.log("fetchNotification")
+    dispatch(fetchNotification());
+  }, [dispatch]);
 
-      flatListRef.current?.scrollToIndex({
-        index: currentIndex.current,
-        animated: true,
-      });
-    }, 3000);
+  // Filter only active notifications after data loads
+  useEffect(() => {
+    const filtered = notificationList.filter(item => item.active === true);
+    setActiveNotifications(filtered);
+    setCurrentIndex(0); // Reset index when list changes
+  }, [notificationList]);
 
-    return () => clearInterval(scrollInterval);
-  }, []);
+  // Auto slide every 2 seconds after notifications are ready
+  useEffect(() => {
+    if (activeNotifications.length === 0) return;
 
-  const renderItem = ({ item }) => (
-    <View style={[styles.notificationItem, { width: width - 32 }]}>
-      <Text style={styles.notificationText}>{item.message}</Text>
-    </View>
-  );
+    const interval = setInterval(() => {
+      setCurrentIndex(prevIndex =>
+        prevIndex === activeNotifications.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 2000);
+
+    return () => clearInterval(interval); // Cleanup
+  }, [activeNotifications]);
+
+  // Loading / Error / No data handling
+  if (isLoader) {
+    return <Text style={styles.loaderText}>Loading...</Text>;
+  }
+
+  if (isError) {
+    return <Text style={styles.errorText}>Failed to load notifications</Text>;
+  }
+
+  if (activeNotifications.length === 0) {
+    return <Text style={styles.noDataText}>No active notifications available</Text>;
+  }
+
+  // Manual navigation
+  const handleLeftArrowClick = () => {
+    setCurrentIndex(prevIndex =>
+      prevIndex === 0 ? activeNotifications.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleRightArrowClick = () => {
+    setCurrentIndex(prevIndex =>
+      prevIndex === activeNotifications.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const combinedText = `${activeNotifications[currentIndex]?.title} - ${activeNotifications[currentIndex]?.description}`;
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ref={flatListRef}
-        data={notifications}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-        snapToInterval={width - 32}
-        snapToAlignment="center"
-        decelerationRate="fast"
-        contentContainerStyle={styles.listContainer}
-        onScrollToIndexFailed={() => {}}
-      />
+      <TouchableOpacity style={styles.arrow} onPress={handleLeftArrowClick}>
+        <AntDesign name="left" size={16} color="black" />
+      </TouchableOpacity>
+
+      <View style={styles.messageWrapper}>
+        <Text style={styles.combinedText}>{combinedText}</Text>
+      </View>
+
+      <TouchableOpacity style={styles.arrow} onPress={handleRightArrowClick}>
+        <AntDesign name="right" size={16} color="black" />
+      </TouchableOpacity>
     </View>
   );
 };
 
+export default HorizontalSliderBanner;
+
 const styles = StyleSheet.create({
   container: {
-    height: 50,
-    backgroundColor: '#f8f8f8',
-    paddingHorizontal: 16,
-  },
-  listContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#1f202c',
+    paddingVertical: 2,
+    paddingHorizontal: 5,
   },
-  notificationItem: {
-    flex: 1,
+  arrow: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 5,
+    marginHorizontal: 5,
+  },
+  messageWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    padding: 20,
+    backgroundColor: '#2a2b38',
     borderRadius: 8,
-    marginVertical: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    marginHorizontal: 10,
+    flex: 1,
+    minWidth: 200,
   },
-  notificationText: {
-    fontSize: 14,
-    color: '#333',
+  combinedText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
+  loaderText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  noDataText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 16,
+  },
 });
-
-export default NotificationSlider; 

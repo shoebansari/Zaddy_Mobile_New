@@ -7,13 +7,13 @@ const SkinInsight = () => {
       id: 1,
       title: 'Understanding Your Skin Type',
       description: 'Learn how to identify and care for your skin type',
-      image: 'https://via.placeholder.com/200x150',
+      image: require('../../assets/skininsight.png'),
     },
     {
       id: 2,
       title: 'Daily Skincare Routine',
       description: 'Essential steps for a healthy skincare routine',
-      image: 'https://via.placeholder.com/200x150',
+      image: require('../../assets/skininsight2.png'),
     },
   ];
 
@@ -24,7 +24,7 @@ const SkinInsight = () => {
         {insights.map((insight) => (
           <TouchableOpacity key={insight.id} style={styles.insightCard}>
             <Image
-              source={{ uri: insight.image }}
+              source={insight.image}
               style={styles.insightImage}
               resizeMode="cover"
             />

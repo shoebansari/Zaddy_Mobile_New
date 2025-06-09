@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 
 // Import reducers here
 import userReducer from './slices/userSlice';
+import homeReducer from './slices/homeSlice';
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +16,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   // Add reducers here
   user: userReducer,
+  homeSlice: homeReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

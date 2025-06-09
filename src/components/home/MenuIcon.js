@@ -1,61 +1,62 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { fetchCategory } from '../../redux/slices/homeSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native'; 
 
-const MenuIcon = () => {
-  const menuItems = [
-    { id: 1, title: 'Skincare', icon: '🧴' },
-    { id: 2, title: 'Makeup', icon: '💄' },
-    { id: 3, title: 'Hair', icon: '💇‍♀️' },
-    { id: 4, title: 'Body', icon: '🧼' },
-    { id: 5, title: 'Fragrance', icon: '🌸' },
-    { id: 6, title: 'Tools', icon: '🔧' },
-    { id: 7, title: 'Sets', icon: '🎁' },
-    { id: 8, title: 'Sale', icon: '🏷️' },
-  ];
+export default function MenuIcons() {
+  const categoryList = useSelector(state => state.homeSlice.categoryList?.menu || []);
+  const dispatch = useDispatch();
+  const navigation = useNavigation(); 
 
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, [dispatch]);
+
+    const handlePress = (item) => {
+     navigation.navigate('ProductsScreen', { 
+       categoryId: item.id, 
+       name: item.name
+     });
+   };
   return (
-    <View style={styles.container}>
-      <View style={styles.grid}>
-        {menuItems.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.menuItem}>
-            <Text style={styles.icon}>{item.icon}</Text>
-            <Text style={styles.title}>{item.title}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+    <ScrollView
+      horizontal={true}
+      showsHorizontalScrollIndicator={false} 
+      contentContainerStyle={styles.menuRow}
+    >
+      {categoryList.map((item) => (
+        <TouchableOpacity key={item.categoryId} style={styles.menuItem} onPress={() => handlePress(item)}>
+          <Image source={{ uri: item.image }} style={styles.menuIcon} />
+          <Text style={styles.menuText}>{item.name}</Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 15,
-    backgroundColor: '#fff',
+  menuRow: { 
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'space-around', 
+    marginVertical: 15 
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+  menuItem: { 
+    alignItems: 'center', 
+    margin: 10 ,
+    
   },
-  menuItem: {
-    width: '23%',
-    aspectRatio: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 15,
-    backgroundColor: '#f8f8f8',
-    borderRadius: 10,
-    padding: 10,
+  menuIcon: { 
+    width: 50, 
+    border:"1px solid black",
+    height: 50, 
+    marginBottom: 5, 
+    borderRadius: 25, 
+    resizeMode: 'cover' 
   },
-  icon: {
-    fontSize: 24,
-    marginBottom: 5,
-  },
-  title: {
-    fontSize: 12,
-    textAlign: 'center',
-    color: '#333',
+  menuText: { 
+    fontSize: 12, 
+    textAlign: 'center' 
   },
 });
-
-export default MenuIcon; 
