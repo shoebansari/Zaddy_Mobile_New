@@ -7,16 +7,14 @@ import { fetchNotification } from '../../redux/slices/homeSlice';
 const HorizontalSliderBanner = () => {
   const dispatch = useDispatch();
   const notificationList2 = useSelector(state => state.homeSlice);
-  console.log("notificationList2", notificationList2)
+  
   const { notificationList, isLoader, isError } = useSelector(state => state.homeSlice);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeNotifications, setActiveNotifications] = useState([]);
 
-  console.log("notificationList", notificationList)
   // Fetch notifications on mount
   useEffect(() => {
-    console.log("fetchNotification")
     dispatch(fetchNotification());
   }, [dispatch]);
 

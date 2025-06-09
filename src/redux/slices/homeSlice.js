@@ -13,7 +13,6 @@ export const fetchCategory = createAsyncThunk("fetchCategory", async () => {
 
 export const fetchNotification = createAsyncThunk("fetchNotification", async () => {
   const data = await getRequestNoToken("/Notification/getAllNotification");
-  console.log("data==", data)
   return data.data; 
 });
 

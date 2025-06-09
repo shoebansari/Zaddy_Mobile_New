@@ -6,6 +6,17 @@ import { combineReducers } from 'redux';
 // Import reducers here
 import userReducer from './slices/userSlice';
 import homeReducer from './slices/homeSlice';
+import productsReducer from './slices/productsSlice';
+import skinInsightReducer from './slices/SkinInsightSlice';
+import contactUsReducer from './slices/contactUsSlice';
+import forgotPasswordReducer from './slices/resetPasswordSlice';
+import filterReducer from './slices/filterSlice';
+import trackOrderReducer from './slices/TrackOrderSlice';
+import signInReducer  from './slices/signInSlice';
+import signUpReducer from './slices/signupSlice';
+import varifyOtpReducer from './slices/verifyOtpSlice';
+import cartReducer from './slices/cartSlice';
+
 
 const persistConfig = {
   key: 'root',
@@ -17,6 +28,16 @@ const rootReducer = combineReducers({
   // Add reducers here
   user: userReducer,
   homeSlice: homeReducer,
+  productsSlice: productsReducer,
+  skinInsightSlice: skinInsightReducer,
+  contactUsSlice: contactUsReducer,
+  forgotPasswordSlice: forgotPasswordReducer,
+  filterSlice: filterReducer,
+  trackOrderSlice: trackOrderReducer,
+  signInSlice: signInReducer,
+  signUpSlice: signUpReducer,
+  varifyOtpSlice: varifyOtpReducer,
+  cartSlice: cartReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,25 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View } from 'react-native';
+import SkinInsightForm from '../components/skinInsight/SkinInsightForm';
 
-const SkinInsightScreen = () => {
+export default function SkinInsightScreen() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Skin Insight Screen</Text>
-    </SafeAreaView>
+    <View style={{ flex: 1 }}>
+      <SkinInsightForm />
+    </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  text: {
-    fontSize: 20,
-    color: '#333',
-  },
-});
-
-export default SkinInsightScreen; 
+}
