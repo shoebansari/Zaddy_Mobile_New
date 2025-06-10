@@ -16,6 +16,14 @@ import signInReducer  from './slices/signInSlice';
 import signUpReducer from './slices/signupSlice';
 import varifyOtpReducer from './slices/verifyOtpSlice';
 import cartReducer from './slices/cartSlice';
+import productDetailsReducer from './slices/productDetailsSlice';
+import ratingReviewReducer from './slices/ratingReviewSlice';
+import shippingMethodReducer from './slices/shippingMethodSlice';
+import addressReducer from './slices/addressSlice';
+import orderReducer from './slices/orderSlice';
+import geographyReducer from './slices/geographySlice';
+import paymentReducer from './slices/paymentSlice';
+import couponReducer from './slices/couponSlice';
 
 
 const persistConfig = {
@@ -38,6 +46,14 @@ const rootReducer = combineReducers({
   signUpSlice: signUpReducer,
   varifyOtpSlice: varifyOtpReducer,
   cartSlice: cartReducer,
+  productDetailsSlice: productDetailsReducer,
+  ratingReviewSlice: ratingReviewReducer,
+  shippingMethodSlice: shippingMethodReducer,
+  addressSlice: addressReducer,
+  orderSlice: orderReducer,
+  geographySlice: geographyReducer,
+  paymentSlice: paymentReducer,
+  couponSlice: couponReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

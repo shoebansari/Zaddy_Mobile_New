@@ -1,18 +1,39 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 const Header = () => {
+  const navigation = useNavigation();
+  const currentRoute = useNavigationState(state => 
+    state?.routes ? state.routes[state.routes.length - 1]?.name : null
+  );
+
+  const handleLogoPress = () => {
+    // List of screens that are not in the tab navigator
+    const nonTabScreens = ['ProductDetails', 'ProductsScreen', 'CartScreen'];
+    
+    const isInNonTabScreen = currentRoute && nonTabScreens.includes(currentRoute);
+
+    if (isInNonTabScreen) {
+      // If we're in a non-tab screen, navigate to Tab
+      navigation.navigate('Tab');
+    } else {
+      // If we're in the tab navigator or state is not available, navigate to Home tab
+      navigation.navigate('Home');
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Logo */}
-      <View style={styles.logoContainer}>
+      <TouchableOpacity style={styles.logoContainer} onPress={handleLogoPress}>
         <Image
           source={require('../../assets/logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
-      </View>
+      </TouchableOpacity>
 
       {/* Right Icons */}
       <View style={styles.rightContainer}>

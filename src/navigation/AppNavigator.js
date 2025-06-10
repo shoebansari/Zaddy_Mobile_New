@@ -12,7 +12,9 @@ import TrackOrderScreen from '../screens/TrackOrderScreen';
 import WhatWeStandForScreen from '../screens/WhatWeStandForScreen';
 import Header from '../components/header/Header';
 import CartScreen from '../screens/CartScreen/CartScreen';
-import HomeScreen from '../screens/HomeScreen';
+import ProductsScreen from '../screens/ProductsScreen';
+import ProductDetailsScreen from '../screens/ProductDetailsScreen/ProductDetailsScreen';
+import ShippingScreen from '../screens/ShippingScreen/ShippingScreen';
 
 const Stack = createStackNavigator();
 
@@ -38,7 +40,10 @@ const AppNavigator = () => {
         <Stack.Screen name="TrackOrder" component={TrackOrderScreen} />
         <Stack.Screen name="WhatWeStandFor" component={WhatWeStandForScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="ProductsScreen" component={ProductsScreen} />
+        <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
+        <Stack.Screen name="ShippingScreen" component={ShippingScreen} />
+        {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
       </Stack.Navigator>
     </View>
   );

@@ -71,9 +71,7 @@ const SkinCareInsightForm = () => {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <Header title="Skin Insight Form" />
-      
+    <View style={styles.mainContainer}>      
       <ScrollView 
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
