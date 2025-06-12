@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { SafeAreaView, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { postSkincareForm } from '../../redux/slices/SkinInsightSlice';
-import Header from '../header/Header';
 import { Dropdown } from 'react-native-element-dropdown';
 import { RadioButton } from 'react-native-paper';
 
 const SkinCareInsightForm = () => {
   const dispatch = useDispatch();
- // const { loading, error } = useSelector(state => state.SkinInsightSlice);
   const navigation = useNavigation();
 
   const [name, setFullName] = useState('');
@@ -71,24 +69,18 @@ const SkinCareInsightForm = () => {
   };
 
   return (
-    <View style={styles.mainContainer}>      
+    <SafeAreaView style={styles.mainContainer}>      
       <ScrollView 
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.formContainer}>
-          <TouchableOpacity 
-            onPress={() => navigation.goBack()} 
-            style={styles.backButton}
-          >
-            <Ionicons name="arrow-back" size={24} color="#000" />
-          </TouchableOpacity>
-
           <Text style={styles.title}>Skincare Information Form</Text>
 
           <TextInput
-            style={styles.input}
+            style={[styles.input, errors.name && styles.inputError]}
             placeholder="Full Name"
+            placeholderTextColor="#999"
             value={name}
             onChangeText={setFullName}
           />
@@ -96,7 +88,7 @@ const SkinCareInsightForm = () => {
 
           <Text style={styles.label}>Select Age Group:</Text>
           <Dropdown
-            style={styles.dropdown}
+            style={[styles.dropdown, errors.age && styles.inputError]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -116,7 +108,7 @@ const SkinCareInsightForm = () => {
 
           <Text style={styles.label}>Select Gender:</Text>
           <Dropdown
-            style={styles.dropdown}
+            style={[styles.dropdown, errors.gender && styles.inputError]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -136,7 +128,7 @@ const SkinCareInsightForm = () => {
 
           <Text style={styles.label}>Select Skin Type:</Text>
           <Dropdown
-            style={styles.dropdown}
+            style={[styles.dropdown, errors.skintype && styles.inputError]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -161,6 +153,7 @@ const SkinCareInsightForm = () => {
                 value="Yes"
                 status={skinSensitive === 'Yes' ? 'checked' : 'unchecked'}
                 onPress={() => setIsSensitive('Yes')}
+                color="#007AFF"
               />
               <Text>Yes</Text>
             </View>
@@ -169,81 +162,85 @@ const SkinCareInsightForm = () => {
                 value="No"
                 status={skinSensitive === 'No' ? 'checked' : 'unchecked'}
                 onPress={() => setIsSensitive('No')}
+                color="#007AFF"
               />
               <Text>No</Text>
             </View>
           </View>
           {errors.skinSensitive && <Text style={styles.errorText}>{errors.skinSensitive}</Text>}
 
-          {/* <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            {loading ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Proceed</Text>
-            )}
+          <TouchableOpacity 
+            style={styles.button}
+            onPress={handleSubmit}
+          >
+            <Text style={styles.buttonText}>Proceed</Text>
           </TouchableOpacity>
-
-          {error && <Text style={styles.errorText}>{error}</Text>} */}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fff",
   },
   scrollContainer: {
     flexGrow: 1,
     paddingBottom: 20,
-    paddingTop: 20, // Added padding at the top
   },
   formContainer: {
     padding: 20,
     width: '100%',
     maxWidth: 500,
     alignSelf: 'center',
-    position: 'relative', // Added for back button positioning
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    marginTop: 30, // Added margin to account for back button
+    color: '#222',
+    marginTop: 10,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 45,
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 10,
-    marginBottom: 5,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 12,
     backgroundColor: '#fff',
+    fontSize: 16,
+    color: '#333',
+  },
+  inputError: {
+    borderColor: '#ff0000',
   },
   label: {
     fontSize: 16,
-    marginBottom: 5,
-    marginTop: 10,
+    marginBottom: 6,
+    marginTop: 12,
     color: '#333',
+    fontWeight: '500',
   },
   dropdown: {
-    height: 50,
-    borderColor: 'gray',
+    height: 45,
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 5,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 12,
     backgroundColor: '#fff',
   },
   placeholderStyle: {
     fontSize: 16,
-    color: 'gray',
+    color: '#999',
   },
   selectedTextStyle: {
     fontSize: 16,
+    color: '#333',
   },
   inputSearchStyle: {
     height: 40,
@@ -252,20 +249,22 @@ const styles = StyleSheet.create({
   radioContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 20,
+    marginTop: 8,
   },
   radioOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 20,
+    marginRight: 30,
   },
   button: {
-    backgroundColor: '#333333',
+    backgroundColor: '#007AFF',
     padding: 15,
-    borderRadius: 7,
+    borderRadius: 8,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
     width: '100%',
+    height: 50,
   },
   buttonText: {
     color: 'white',
@@ -273,9 +272,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   errorText: {
-    color: 'red',
-    marginBottom: 10,
+    color: '#ff0000',
     fontSize: 14,
+    marginBottom: 10,
   },
   backButton: {
     position: 'absolute',

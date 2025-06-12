@@ -11,7 +11,6 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   SafeAreaView,
-  ScrollView
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSortByData, getAllProduct } from '../redux/slices/productsSlice';
@@ -208,6 +207,12 @@ export default function ProductsScreen() {
     setPage(1);
   };
 
+  const renderHeader = () => (
+    <View>
+      <Text style={styles.title}>All Products</Text>
+    </View>
+  );
+
   if (loading && page === 1) {
     return (
       <View style={styles.centered}>
@@ -225,218 +230,212 @@ export default function ProductsScreen() {
   }
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.arrowButton}>
-          <Text style={[styles.arrowText, { fontSize: 32, fontWeight: 'bold' }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>All Products</Text>
-
-        <FlatList
-          data={displayProducts}
-          keyExtractor={(item) => item.productId.toString()}
-          numColumns={2}
-          columnWrapperStyle={styles.row}
-          contentContainerStyle={styles.listContent}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() => handleClick(item.productId, item.productName)}
-            >
-              {item.imageUrl && item.imageUrl.length > 0 ? (
-                <Image source={{ uri: item.imageUrl }} style={styles.image} />
-              ) : (
-                <Text style={styles.noImage}>No image</Text>
-              )}
-              <Text style={styles.productName}>{item.productName}</Text>
-              <View style={styles.ratingContainer}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Text
-                    key={star}
-                    style={[
-                      styles.star,
-                      { color: star <= Math.round(item.rating) ? '#ffd700' : '#d3d3d3' }
-                    ]}
-                  >
-                    ★
-                  </Text>
-                ))}
-              </View>
-
-              <View style={styles.priceContainer}>
-                <Text style={styles.discountPrice}>₹{item.price}</Text>
-                <Text style={styles.mrp}>₹{item.mrp}</Text>
-                <Text style={styles.discountLabel}>
-                  {item.discountPrice} ₹ Off
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )}
-          ListFooterComponent={() => (
-            isLoadingMore ? (
-              <ActivityIndicator size="small" color="#0000ff" />
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={displayProducts}
+        keyExtractor={(item) => item.productId.toString()}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
+        contentContainerStyle={styles.listContent}
+        ListHeaderComponent={renderHeader}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => handleClick(item.productId, item.productName)}
+          >
+            {item.imageUrl && item.imageUrl.length > 0 ? (
+              <Image source={{ uri: item.imageUrl }} style={styles.image} />
             ) : (
-              <TouchableOpacity
-                style={styles.loadMoreButton}
-                onPress={loadMoreProducts}
-              >
-                <Text style={styles.loadMoreText}>Load More</Text>
-              </TouchableOpacity>
-            )
-          )}
-          onEndReached={loadMoreProducts}
-          onEndReachedThreshold={0.5}
-        />
-
-        <View style={styles.fixedBottom}>
-          <TouchableOpacity
-            style={[styles.bottomButton, styles.sortButton]}
-            onPress={() => setSortModalVisible(true)}
-          >
-            <Text style={styles.bottomButtonText}>Sort by</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.bottomButton, styles.filterButton]}
-            onPress={() => setFilterModalVisible(true)}
-          >
-            <Text style={styles.bottomButtonText}>Filter</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Sort Modal */}
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={sortModalVisible}
-          onRequestClose={() => setSortModalVisible(false)}
-        >
-          <TouchableWithoutFeedback onPress={() => setSortModalVisible(false)}>
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>Sort By</Text>
-                {Array.isArray(sorts) && sorts.map((sort) => (
-                  <Pressable
-                    key={sort.sortById}
-                    onPress={() => handleSort(sort.sortByName)}
-                    style={[
-                      styles.modalButton,
-                      sortOption === sort.sortByName && styles.selectedSortOption
-                    ]}
-                  >
-                    <Text>{sort.sortByName}</Text>
-                    {sortOption === sort.sortByName && (
-                      <Text style={styles.selectedSortIcon}>✓</Text>
-                    )}
-                  </Pressable>
-                ))}
-                <Pressable onPress={() => setSortModalVisible(false)} style={styles.modalCancel}>
-                  <Text style={{ color: 'red' }}>Cancel</Text>
-                </Pressable>
-              </View>
+              <Text style={styles.noImage}>No image</Text>
+            )}
+            <Text style={styles.productName}>{item.productName}</Text>
+            <View style={styles.ratingContainer}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Text
+                  key={star}
+                  style={[
+                    styles.star,
+                    { color: star <= Math.round(item.rating) ? '#ffd700' : '#d3d3d3' }
+                  ]}
+                >
+                  ★
+                </Text>
+              ))}
             </View>
-          </TouchableWithoutFeedback>
-        </Modal>
 
-        {/* Filter*/}
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={filterModalVisible}
-          onRequestClose={() => setFilterModalVisible(false)}
-        >
-          <TouchableWithoutFeedback onPress={() => setFilterModalVisible(false)}>
-            <View style={styles.modalOverlay}>
-              <View style={[styles.modalContent, { height: '80%' }]}>
-                <SafeAreaView style={styles.fContainer}>
-                  <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Filters</Text>
-                    <TouchableOpacity onPress={clearAll}>
-                      <Text style={styles.clearAll}>CLEAR ALL</Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <Text style={styles.appliedText}>
-                    {Object.values(selectedFilters).flat().length} Applied
-                  </Text>
-
-                  <View style={styles.filterContainer}>
-                    <View style={styles.filterList}>
-                      {['Category', 'Step', 'typeOfProduct', 'Size', 'Concern', 'Price', 'Ingredient'].map(filter => (
-                        <TouchableOpacity
-                          key={filter}
-                          style={[
-                            styles.filterItem,
-                            activeFilter === filter && styles.activeFilterItem,
-                          ]}
-                          onPress={() => setActiveFilter(filter)}
-                        >
-                          <Text style={styles.filterText}>
-                            {filter === 'typeOfProduct' ? 'Type Of Product' : filter}
-                          </Text>
-                          {selectedFilters[filter]?.length > 0 && (
-                            <View style={styles.filterBadge}>
-                              <Text style={styles.filterBadgeText}>{selectedFilters[filter].length}</Text>
-                            </View>
-                          )}
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-
-                    <ScrollView style={styles.optionList}>
-                      {activeFilter === 'Price' ? (
-                        <>
-                          <Text style={styles.rangeLabel}>
-                            Selected Range: ₹{priceRange[0]} - ₹{priceRange[1]}
-                          </Text>
-                          <Slider
-                            style={{ width: '100%', height: 40 }}
-                            minimumValue={0}
-                            maximumValue={2000}
-                            step={1}
-                            value={priceRange[1]}
-                            onValueChange={value => setPriceRange([priceRange[0], value])}
-                            minimumTrackTintColor="#000"
-                            maximumTrackTintColor="#ccc"
-                            thumbTintColor="#000"
-                          />
-                        </>
-                      ) : (
-                        (dynamicFilterOptions[activeFilter] || []).map(({ label, count }) => {
-                          const selected = selectedFilters[activeFilter]?.includes(label);
-                          return (
-                            <TouchableOpacity
-                              key={label}
-                              style={styles.optionRow}
-                              onPress={() => toggleOption(activeFilter, label)}
-                            >
-                              <View style={[styles.checkbox, selected && styles.checkedBox]} />
-                              <Text style={styles.optionLabel}>{label}</Text>
-                              <Text style={styles.optionCount}>({count})</Text>
-                            </TouchableOpacity>
-                          );
-                        })
-                      )}
-                    </ScrollView>
-                  </View>
-
-                  <View style={styles.footer}>
-                    <TouchableOpacity style={styles.cancelButton} onPress={() => setFilterModalVisible(false)}>
-                      <Text style={styles.cancelText}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.applyButton}
-                      onPress={applyFilters}
-                    >
-                      <Text style={styles.applyText}>Apply</Text>
-                    </TouchableOpacity>
-                  </View>
-                </SafeAreaView>
-              </View>
+            <View style={styles.priceContainer}>
+              <Text style={styles.discountPrice}>₹{item.price}</Text>
+              <Text style={styles.mrp}>₹{item.mrp}</Text>
+              <Text style={styles.discountLabel}>
+                {item.discountPrice} ₹ Off
+              </Text>
             </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+          </TouchableOpacity>
+        )}
+        ListFooterComponent={() => (
+          isLoadingMore ? (
+            <ActivityIndicator size="small" color="#0000ff" />
+          ) : (
+            <TouchableOpacity
+              style={styles.loadMoreButton}
+              onPress={loadMoreProducts}
+            >
+              <Text style={styles.loadMoreText}>Load More</Text>
+            </TouchableOpacity>
+          )
+        )}
+        onEndReached={loadMoreProducts}
+        onEndReachedThreshold={0.5}
+      />
+
+      <View style={styles.fixedBottom}>
+        <TouchableOpacity
+          style={[styles.bottomButton, styles.sortButton]}
+          onPress={() => setSortModalVisible(true)}
+        >
+          <Text style={styles.bottomButtonText}>Sort by</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.bottomButton, styles.filterButton]}
+          onPress={() => setFilterModalVisible(true)}
+        >
+          <Text style={styles.bottomButtonText}>Filter</Text>
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+
+      {/* Sort Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={sortModalVisible}
+        onRequestClose={() => setSortModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setSortModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Sort By</Text>
+              {Array.isArray(sorts) && sorts.map((sort) => (
+                <Pressable
+                  key={sort.sortById}
+                  onPress={() => handleSort(sort.sortByName)}
+                  style={[
+                    styles.modalButton,
+                    sortOption === sort.sortByName && styles.selectedSortOption
+                  ]}
+                >
+                  <Text>{sort.sortByName}</Text>
+                  {sortOption === sort.sortByName && (
+                    <Text style={styles.selectedSortIcon}>✓</Text>
+                  )}
+                </Pressable>
+              ))}
+              <Pressable onPress={() => setSortModalVisible(false)} style={styles.modalCancel}>
+                <Text style={{ color: 'red' }}>Cancel</Text>
+              </Pressable>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
+      {/* Filter Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={filterModalVisible}
+        onRequestClose={() => setFilterModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setFilterModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalContent, { height: '80%' }]}>
+              <SafeAreaView style={styles.fContainer}>
+                <View style={styles.header}>
+                  <Text style={styles.headerTitle}>Filters</Text>
+                  <TouchableOpacity onPress={clearAll}>
+                    <Text style={styles.clearAll}>CLEAR ALL</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={styles.appliedText}>
+                  {Object.values(selectedFilters).flat().length} Applied
+                </Text>
+
+                <View style={styles.filterContainer}>
+                  <View style={styles.filterList}>
+                    {['Category', 'Step', 'typeOfProduct', 'Size', 'Concern', 'Price', 'Ingredient'].map(filter => (
+                      <TouchableOpacity
+                        key={filter}
+                        style={[
+                          styles.filterItem,
+                          activeFilter === filter && styles.activeFilterItem,
+                        ]}
+                        onPress={() => setActiveFilter(filter)}
+                      >
+                        <Text style={styles.filterText}>
+                          {filter === 'typeOfProduct' ? 'Type Of Product' : filter}
+                        </Text>
+                        {selectedFilters[filter]?.length > 0 && (
+                          <View style={styles.filterBadge}>
+                            <Text style={styles.filterBadgeText}>{selectedFilters[filter].length}</Text>
+                          </View>
+                        )}
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  <View style={styles.optionList}>
+                    {activeFilter === 'Price' ? (
+                      <>
+                        <Text style={styles.rangeLabel}>
+                          Selected Range: ₹{priceRange[0]} - ₹{priceRange[1]}
+                        </Text>
+                        <Slider
+                          style={{ width: '100%', height: 40 }}
+                          minimumValue={0}
+                          maximumValue={2000}
+                          step={1}
+                          value={priceRange[1]}
+                          onValueChange={value => setPriceRange([priceRange[0], value])}
+                          minimumTrackTintColor="#000"
+                          maximumTrackTintColor="#ccc"
+                          thumbTintColor="#000"
+                        />
+                      </>
+                    ) : (
+                      (dynamicFilterOptions[activeFilter] || []).map(({ label, count }) => {
+                        const selected = selectedFilters[activeFilter]?.includes(label);
+                        return (
+                          <TouchableOpacity
+                            key={label}
+                            style={styles.optionRow}
+                            onPress={() => toggleOption(activeFilter, label)}
+                          >
+                            <View style={[styles.checkbox, selected && styles.checkedBox]} />
+                            <Text style={styles.optionLabel}>{label}</Text>
+                            <Text style={styles.optionCount}>({count})</Text>
+                          </TouchableOpacity>
+                        );
+                      })
+                    )}
+                  </View>
+                </View>
+
+                <View style={styles.footer}>
+                  <TouchableOpacity style={styles.cancelButton} onPress={() => setFilterModalVisible(false)}>
+                    <Text style={styles.cancelText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.applyButton}
+                    onPress={applyFilters}
+                  >
+                    <Text style={styles.applyText}>Apply</Text>
+                  </TouchableOpacity>
+                </View>
+              </SafeAreaView>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </SafeAreaView>
   );
 }
 

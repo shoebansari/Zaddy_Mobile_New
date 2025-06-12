@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView } from 'react-native';
 import styles from './SignInStyle';
 import { onLogin } from '../../redux/slices/signInSlice';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function SignInScreen() {
   const [username, setUsername] = useState('');
@@ -51,8 +50,7 @@ export default function SignInScreen() {
   };
 
   return (
-    <View style={styles.wrapper} accessible={true}>
-      {/* Scrollable Content with Keyboard Handling */}
+    <SafeAreaView style={styles.wrapper}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
@@ -61,87 +59,51 @@ export default function SignInScreen() {
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Back Button */}
-          <TouchableOpacity 
-            onPress={() => navigation.goBack()} 
-            style={styles.backButton}
-            accessible={true}
-            accessibilityLabel="Go back"
-            accessibilityRole="button"
-          >
-            <Ionicons name="arrow-back" size={24} color="#000" />
-          </TouchableOpacity>
-
           <View style={styles.innerContainer}>
             <Text style={styles.welcomeText}>Welcome Back!</Text>
 
-            <View accessible={true} accessibilityRole="form">
-              <Text style={styles.label}>User Name</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter Username"
-                value={username}
-                onChangeText={setUsername}
-                accessibilityLabel="Username input"
-                accessibilityHint="Enter your username"
-                autoCapitalize="none"
-                autoComplete="username"
-              />
-              {errors.username && (
-                <Text style={styles.errorText} accessibilityRole="alert">
-                  {errors.username}
-                </Text>
-              )}
+            <Text style={styles.label}>User Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Username"
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+            />
+            {errors.username && (
+              <Text style={styles.errorText}>{errors.username}</Text>
+            )}
 
-              <Text style={styles.label}>Password</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-                accessibilityLabel="Password input"
-                accessibilityHint="Enter your password"
-                autoCapitalize="none"
-                autoComplete="password"
-              />
-              {errors.password && (
-                <Text style={styles.errorText} accessibilityRole="alert">
-                  {errors.password}
-                </Text>
-              )}
-
-              <TouchableOpacity 
-                style={styles.button} 
-                onPress={onSubmit}
-                accessible={true}
-                accessibilityLabel="Sign in"
-                accessibilityRole="button"
-              >
-                <Text style={styles.buttonText}>Login</Text>
-              </TouchableOpacity>
-            </View>
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+              autoCapitalize="none"
+            />
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
 
             <TouchableOpacity 
-              onPress={() => navigation.navigate('SignUp')}
-              accessible={true}
-              accessibilityLabel="Sign up"
-              accessibilityRole="link"
+              style={styles.button} 
+              onPress={onSubmit}
             >
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
               <Text style={styles.signInText}>Don't Have An Account? Sign Up</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              onPress={() => navigation.navigate('ForgotPassword')}
-              accessible={true}
-              accessibilityLabel="Forgot password"
-              accessibilityRole="link"
-            >
+            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
               <Text style={styles.signInText}>Forgot Password</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 }

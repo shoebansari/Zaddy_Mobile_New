@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContactUs } from '../redux/slices/contactUsSlice';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function ContactUsScreen() {
   const navigation = useNavigation();
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -37,30 +35,27 @@ export default function ContactUsScreen() {
   }
 
   return (
-    <View style={styles.mainContainer}>
-      
-      {/* Scrollable Content */}
+    <SafeAreaView style={styles.mainContainer}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
       >
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <TouchableOpacity 
-            onPress={() => navigation.navigate('Tab', { screen: 'Account' })} 
-            style={styles.backButton}
-          >
-            <Ionicons name="arrow-back" size={24} color="#000" />
-          </TouchableOpacity>
-
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Contact Us</Text>
-          </View>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.title}>Contact Us</Text>
+          
+          <Text style={styles.paragraph}>
+            Have a question or concern? We're here to help! Fill out the form below and we'll get back to you as soon as possible.
+          </Text>
 
           <TextInput
             style={styles.input}
             placeholder="Your Name"
             value={name}
             onChangeText={setName}
+            placeholderTextColor="#999"
           />
 
           <TextInput
@@ -69,6 +64,7 @@ export default function ContactUsScreen() {
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
+            placeholderTextColor="#999"
           />
 
           <TextInput
@@ -78,6 +74,7 @@ export default function ContactUsScreen() {
             onChangeText={setMessage}
             multiline={true}
             numberOfLines={5}
+            placeholderTextColor="#999"
           />
 
           <TouchableOpacity
@@ -91,7 +88,7 @@ export default function ContactUsScreen() {
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -100,37 +97,42 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  headerContainer: {
-    width: '100%',
-  },
   scrollContainer: {
-    padding: 24,
-    paddingTop: 70, 
-    paddingBottom: 40,
-  },
-  titleContainer: {
-    marginBottom: 30,
+    padding: 20,
+    paddingTop: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#222',
+  },
+  paragraph: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#444',
+    marginBottom: 24,
     textAlign: 'center',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
     marginBottom: 20,
+    color: '#333',
+    backgroundColor: '#fff',
   },
   textArea: {
     height: 120,
     textAlignVertical: 'top',
+    paddingTop: 12,
   },
   button: {
-    backgroundColor: '#000000',
+    backgroundColor: '#007AFF',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -140,11 +142,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 1,
   }
 });

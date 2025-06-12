@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendOtp } from '../redux/slices/forgotPasswordSlice';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
-import { Ionicons } from '@expo/vector-icons';
 
 const ForgotPasswordScreen = () => {
   const [username, setUsername] = useState('');
@@ -45,16 +44,7 @@ const ForgotPasswordScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity 
-        onPress={() => navigation.goBack()} 
-        style={styles.backButton}
-      >
-        <Ionicons name="arrow-back" size={24} color="#000" />
-      </TouchableOpacity>
-
-      {/* Centered Form */}
+    <SafeAreaView style={styles.container}>
       <View style={styles.formContainer}>
         <Text style={styles.title}>Forgot Password</Text>
 
@@ -81,66 +71,67 @@ const ForgotPasswordScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 60,
-    left: 20,
-    zIndex: 10,
+    backgroundColor: '#fff',
   },
   formContainer: {
     flex: 1,
+    padding: 20,
+    paddingTop: 30,
+    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 30,
+    color: '#222',
     textAlign: 'center',
   },
   input: {
+    width: '100%',
     height: 50,
-    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 15,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 8,
     fontSize: 16,
+    backgroundColor: '#fff',
+    marginBottom: 15,
+    color: '#333',
   },
   inputError: {
-    borderColor: 'red',
+    borderColor: '#ff0000',
+  },
+  errorText: {
+    color: '#ff0000',
+    fontSize: 14,
+    marginBottom: 15,
+    alignSelf: 'flex-start',
   },
   button: {
+    backgroundColor: '#007AFF',
+    width: '100%',
     height: 50,
-    backgroundColor: '#000',
-    borderRadius: 30,
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
   buttonDisabled: {
-    backgroundColor: '#aaa',
+    opacity: 0.7,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 14,
-    marginBottom: 10,
-    marginLeft: 5,
-  },
+    fontSize: 16,
+    fontWeight: '600',
+  }
 });
 
 export default ForgotPasswordScreen;

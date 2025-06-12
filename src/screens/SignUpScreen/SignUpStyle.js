@@ -7,11 +7,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     padding: 20,
-    paddingTop: 20,
-    paddingBottom: 40,
-  },
-  backButton: {
-    marginBottom: 20,
+    paddingVertical: 30,
   },
   formContainer: {
     flex: 1,

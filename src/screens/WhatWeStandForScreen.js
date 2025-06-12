@@ -1,24 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons'; 
 
 export default function WhatWeStandForScreen() {
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.mainContainer}>      
-      {/* Main content area */}
       <View style={styles.contentWrapper}>
-        {/* Back button positioned absolutely */}
-        <TouchableOpacity 
-          onPress={() => navigation.navigate('Tab', { screen: 'Account' })} 
-          style={styles.backButton}
-        >
-          <Ionicons name="arrow-back" size={24} color="#000" />
-        </TouchableOpacity>
-
-        {/* Scrollable content */}
         <ScrollView 
           contentContainerStyle={styles.scrollContainer}
           showsVerticalScrollIndicator={false}
@@ -71,7 +60,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 24,
-    paddingTop: 60, 
+    paddingTop: 20,
     paddingBottom: 20,
   },
   title: {
@@ -99,11 +88,5 @@ const styles = StyleSheet.create({
   brand: {
     fontWeight: 'bold',
     color: '#007AFF',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 10, 
-    left: 20,
-    zIndex: 10,
-  },
+  }
 });

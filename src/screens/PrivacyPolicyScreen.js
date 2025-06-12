@@ -1,27 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function PrivacyPolicyScreen() {
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-
-      {/* Scrollable Content (including back button) */}
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        {/* Back Button - now scrolls with content */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Tab', { screen: 'Account' })}
-          style={styles.backButton}
-        >
-          <Ionicons name="arrow-back" size={24} color="#000" />
-        </TouchableOpacity>
-
         <Text style={styles.title}>Privacy Policy</Text>
 
         <Text style={styles.paragraph}>
@@ -115,11 +104,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     padding: 20,
-    paddingTop: 20, 
-    paddingBottom: 40,
-  },
-  backButton: {
-    marginBottom: 20, 
+    paddingTop: 20,
   },
   title: {
     fontSize: 26,
@@ -129,17 +114,17 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   heading: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     marginTop: 24,
-    marginBottom: 8,
-    color: '#000',
+    marginBottom: 12,
+    color: '#333',
   },
   paragraph: {
     fontSize: 16,
-    lineHeight: 26,
-    color: '#333',
-    marginBottom: 12,
+    lineHeight: 24,
+    color: '#444',
+    marginBottom: 16,
   },
   bullet: {
     fontSize: 16,
@@ -153,8 +138,8 @@ const styles = StyleSheet.create({
     color: '#007AFF',
   },
   note: {
-    fontStyle: 'italic',
-    color: '#555',
+    fontWeight: '600',
+    color: '#333',
   },
   contact: {
     fontSize: 16,

@@ -20,9 +20,9 @@ export default function ImageSlider() {
 }
 
 const styles = StyleSheet.create({
-  slider: { height: 350 },
+  slider: { height: 250 },
   slide: { width, alignItems: 'center', justifyContent: 'center' },
-  banner: { width: width * 0.9, height: 350, borderRadius: 0 },
+  banner: { width: width * 0.9, height: 280, borderRadius: 0 },
   bannerText: { textAlign: 'center', marginTop: 0, fontWeight: 'bold' },
 
 });

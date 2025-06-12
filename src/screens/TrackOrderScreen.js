@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, ScrollView, SafeAreaView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTrackOrder, clearTrackOrder } from '../redux/slices/TrackOrderSlice';
 import { useNavigation } from '@react-navigation/native';
@@ -157,48 +157,49 @@ export default function TrackOrderScreen() {
   };
 
   return (
-    <View style={styles.mainContainer}>    
+    <SafeAreaView style={styles.mainContainer}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.title}>Track Your Order</Text>
 
-      {/* Scrollable Content */}
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Tab', { screen: 'Account' })}
-          style={styles.backButton}
-        >
-          <Ionicons name="arrow-back" size={24} color="#000" />
-        </TouchableOpacity>
+        <Text style={styles.paragraph}>
+          Enter your order number below to track your package and see real-time updates on its delivery status.
+        </Text>
+
+        {/* Add your order tracking form components here */}
+        <View style={styles.trackingContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="e.g., ORD6b83199a"
+            value={OrderNo}
+            onChangeText={setOrderNumber}
+            keyboardType="default"
+          />
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleTrackOrder}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? 'Tracking...' : 'Track Order'}
+            </Text>
+          </TouchableOpacity>
+
+          {loading && <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 20 }} />}
+        </View>
 
         {!showStatus ? (
           <View style={styles.contentContainer}>
-            <Text style={styles.title}>Track Your Order</Text>
-
-            <Text style={styles.label}>Enter your order number below:</Text>
-
-            <TextInput
-              style={styles.input}
-              placeholder="e.g., ORD6b83199a"
-              value={OrderNo}
-              onChangeText={setOrderNumber}
-              keyboardType="default"
-            />
-
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleTrackOrder}
-              disabled={loading}
-            >
-              <Text style={styles.buttonText}>
-                {loading ? 'Tracking...' : 'Track Order'}
-              </Text>
-            </TouchableOpacity>
-
-            {loading && <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 20 }} />}
+            {/* Your tracking form components */}
           </View>
         ) : (
           data && data.length > 0 && renderStatusTimeline(data[0])
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -207,29 +208,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  headerContainer: {
-    width: '100%',
-  },
   scrollContainer: {
-    flexGrow: 1,
-    padding: 24,
-    paddingTop: 70,
-  },
-  contentContainer: {
-    justifyContent: 'flex-start',
-    marginTop: 20,
-
+    padding: 20,
+    paddingTop: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 30,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#222',
+  },
+  paragraph: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#444',
+    marginBottom: 16,
     textAlign: 'center',
   },
-  label: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: '#333',
+  trackingContainer: {
+    marginTop: 20,
   },
   input: {
     borderWidth: 1,
@@ -250,12 +248,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 1,
   },
   timelineContainer: {
     width: '100%',
@@ -354,5 +346,9 @@ const styles = StyleSheet.create({
   stepDate: {
     fontSize: 12,
     color: '#757575',
+  },
+  contentContainer: {
+    justifyContent: 'flex-start',
+    marginTop: 20,
   },
 });

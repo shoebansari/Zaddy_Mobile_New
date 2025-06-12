@@ -15,11 +15,9 @@ export default function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <NavigationContainer>
-            <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-              <StatusBar style="dark" backgroundColor="#FFFFFF" translucent={true} />
-              <AppNavigator />
-              <Toast />
-            </View>
+            <StatusBar style="dark" backgroundColor="#FFFFFF" />
+            <AppNavigator />
+            <Toast />
           </NavigationContainer>
         </PersistGate>
       </Provider>

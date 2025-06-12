@@ -1,19 +1,16 @@
 import { StyleSheet, Dimensions } from 'react-native';
 const { height } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  headerContainer: {
-    width: '100%',
-  },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 30,
+    paddingVertical: 30,
   },
   innerContainer: {
     justifyContent: 'center',
@@ -51,13 +48,6 @@ const styles = StyleSheet.create({
     marginTop: 25,
     minHeight: 48,
   },
-  backButton: {
-    position: 'absolute',
-    top: 10,
-    left: 20,
-    zIndex: 1,
-    padding: 10,
-  },
   buttonText: {
     color: '#fff',
     fontSize: 16,
@@ -75,7 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 4,
     marginBottom: 8,
-  },
+  }
 });
 
 export default styles;

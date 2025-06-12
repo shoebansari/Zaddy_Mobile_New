@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  SafeAreaView
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { resetPassword } from '../redux/slices/resetPasswordSlice';
 import Toast from 'react-native-toast-message';
-import { Ionicons } from '@expo/vector-icons'; 
 
 const ResetPasswordScreen = ({ route }) => {
   const { username } = route.params;
@@ -55,80 +55,96 @@ const ResetPasswordScreen = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-      onPress={() => navigation.navigate('SignInScreen')}
-      style={styles.backButton}
-    >
-      <Ionicons name="arrow-back" size={24} color="#000" />
-    </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.formContainer}>
+        <Text style={styles.title}>Reset Password</Text>
 
-      <Text style={styles.title}>Reset Password</Text>
+        <TextInput
+          style={[styles.input, passwordError && styles.inputError]}
+          placeholder="New Password"
+          placeholderTextColor="#888"
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => {
+            setNewPassword(text);
+            if (passwordError) setPasswordError('');
+          }}
+        />
+        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
-      <TextInput
-        style={[styles.input, passwordError && styles.inputError]}
-        placeholder="New Password"
-        secureTextEntry
-        value={password}
-        onChangeText={(text) => {
-          setNewPassword(text);
-          if (passwordError) setPasswordError('');
-        }}
-      />
-      {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-
-      <TouchableOpacity
-        style={[styles.button, loading && styles.buttonDisabled]}
-        onPress={handleReset}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Reset Password</Text>
-        )}
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={[styles.button, loading && styles.buttonDisabled]}
+          onPress={handleReset}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Reset Password</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, justifyContent: 'center' },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  formContainer: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    color: '#222',
+    textAlign: 'center',
+  },
   input: {
+    width: '100%',
     height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 15,
-    marginBottom: 8,
+    fontSize: 16,
+    backgroundColor: '#fff',
+    marginBottom: 15,
+    color: '#333',
   },
   inputError: {
-    borderColor: 'red',
-  },
-   backButton: {
-    position: 'absolute',
-    top: 60,
-    left: 20,
-    zIndex: 10,
+    borderColor: '#ff0000',
   },
   errorText: {
-    color: 'red',
+    color: '#ff0000',
     fontSize: 14,
-    marginBottom: 12,
-    marginLeft: 5,
+    marginBottom: 15,
+    alignSelf: 'flex-start',
   },
   button: {
-    height: 45,
-    backgroundColor: '#000',
-    borderRadius: 30,
+    backgroundColor: '#007AFF',
+    width: '100%',
+    height: 50,
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20,
   },
   buttonDisabled: {
-    backgroundColor: '#888',
+    opacity: 0.7,
   },
-  buttonText: { color: '#fff', fontSize: 15 },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  }
 });
 
 export default ResetPasswordScreen;
