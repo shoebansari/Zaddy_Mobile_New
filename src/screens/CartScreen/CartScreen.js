@@ -144,7 +144,7 @@ const CartScreen = () => {
         text1: "Please log in to place your order",
       });
 
-      navigation.navigate('SignInScreen');
+      navigation.navigate('SignIn');
       return;
     }
 

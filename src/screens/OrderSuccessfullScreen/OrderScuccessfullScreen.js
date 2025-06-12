@@ -11,7 +11,6 @@ import {
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import styles from './OrderSuccessfullStyle';
-import Header from '../../components/Header';
 
 const OrderSuccessfullScreen = () => {
   const navigation = useNavigation();
@@ -19,7 +18,6 @@ const OrderSuccessfullScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header/>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.content}>
           {/* Success Icon */}

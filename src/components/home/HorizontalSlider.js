@@ -8,25 +8,21 @@ export default function ImageSlider() {
   return (
       <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={styles.slider}>
             <View style={styles.slide}>
-              <Image source={require('../../../assets/img.png')} style={styles.banner} />
+              <Image source={require('../../../assets/banner_1.jpeg')} style={styles.banner} />
               <Text style={styles.bannerText}>Glow Up with Our Bestsellers</Text>
             </View>
             <View style={styles.slide}>
-              <Image source={require('../../../assets/img2.png')} style={styles.banner} />
+              <Image source={require('../../../assets/banner_2.jpeg')} style={styles.banner} />
               <Text style={styles.bannerText}>Your Skin Deserves Better</Text>
-            </View>
-            <View style={styles.slide}>
-              <Image source={require('../../../assets/img3.png')} style={styles.banner} />
-              <Text style={styles.bannerText}>Best Product ever existed</Text>
             </View>
           </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  slider: { height: 200 },
+  slider: { height: 350 },
   slide: { width, alignItems: 'center', justifyContent: 'center' },
-  banner: { width: width * 0.9, height: 150, borderRadius: 10 },
-  bannerText: { textAlign: 'center', marginTop: 5, fontWeight: 'bold' },
+  banner: { width: width * 0.9, height: 350, borderRadius: 0 },
+  bannerText: { textAlign: 'center', marginTop: 0, fontWeight: 'bold' },
 
 });

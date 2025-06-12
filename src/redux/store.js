@@ -9,7 +9,7 @@ import homeReducer from './slices/homeSlice';
 import productsReducer from './slices/productsSlice';
 import skinInsightReducer from './slices/SkinInsightSlice';
 import contactUsReducer from './slices/contactUsSlice';
-import forgotPasswordReducer from './slices/resetPasswordSlice';
+import forgotPasswordReducer from './slices/forgotPasswordSlice';
 import filterReducer from './slices/filterSlice';
 import trackOrderReducer from './slices/TrackOrderSlice';
 import signInReducer  from './slices/signInSlice';
@@ -24,6 +24,8 @@ import orderReducer from './slices/orderSlice';
 import geographyReducer from './slices/geographySlice';
 import paymentReducer from './slices/paymentSlice';
 import couponReducer from './slices/couponSlice';
+import verifyOtpReducer from './slices/verifyOtpSlice';
+import resetPasswordReducer from './slices/resetPasswordSlice';
 
 
 const persistConfig = {
@@ -42,7 +44,7 @@ const rootReducer = combineReducers({
   forgotPasswordSlice: forgotPasswordReducer,
   filterSlice: filterReducer,
   trackOrderSlice: trackOrderReducer,
-  signInSlice: signInReducer,
+  loginSlice: signInReducer,
   signUpSlice: signUpReducer,
   varifyOtpSlice: varifyOtpReducer,
   cartSlice: cartReducer,
@@ -54,6 +56,8 @@ const rootReducer = combineReducers({
   geographySlice: geographyReducer,
   paymentSlice: paymentReducer,
   couponSlice: couponReducer,
+  verifyOtpSlice: verifyOtpReducer,
+  resetPasswordSlice: resetPasswordReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

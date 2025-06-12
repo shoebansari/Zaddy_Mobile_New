@@ -71,12 +71,13 @@ const addressSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAddress.pending, (state) => {
-        state.loading = false;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchAddress.fulfilled, (state, action) => {
-        state.loading = true;
+        state.loading = false;
         state.addressList = action.payload;
+        state.addressData = action.payload;
       })
       .addCase(fetchAddress.rejected, (state, action) => {
         state.loading = false;
@@ -88,28 +89,34 @@ const addressSlice = createSlice({
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.addressData.push(action.payload); 
+        state.addressData.push(action.payload);
+        state.addressList.push(action.payload);
         state.success = true;
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
       .addCase(updateAddress.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.success = false;
       })
       .addCase(updateAddress.fulfilled, (state, action) => {
         state.loading = false;
+        state.success = true;
+        state.error = null;
         const updated = action.payload;
-        state.addressData = state.addressData.map(item =>
-          item.id === updated.id ? updated : item
-        );
+        if (updated && updated.addressId) {
+          state.addressList = state.addressList.map(addr =>
+            addr.addressId === updated.addressId ? updated : addr
+          );
+        }
       })
       .addCase(updateAddress.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.success = false;
       })
       .addCase(deleteAddress.pending, (state) => {
         state.loading = true;
@@ -117,17 +124,14 @@ const addressSlice = createSlice({
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.loading = false;
-
         state.addressList = state.addressList.filter(
           (addr) => addr.addressId !== action.payload.addressId
         );
       })
-
       .addCase(deleteAddress.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
-
   },
 });
 

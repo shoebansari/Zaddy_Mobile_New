@@ -233,66 +233,66 @@ const validCartItems = items.filter(item => item.productId);
   const handleAddressSelect = async (addressId) => {
     try {
       const userId = await getUserId();
-      if (!userId) return;
+      if (!userId) {
+        Toast.show({
+          type: "error",
+          text1: "User not authenticated",
+        });
+        return;
+      }
+
+      setLoading(true);
+
+      // Find the address to update
+      const addressToUpdate = addressList.find(addr => addr.addressId === addressId);
+      if (!addressToUpdate) {
+        Toast.show({
+          type: "error",
+          text1: "Address not found",
+        });
+        return;
+      }
 
       // Reset all addresses to non-default first
       await Promise.all(
-        addressData.map(async (addr) => {
-          if (addr.isDefualt) {
-            const data = {
+        addressList.map(async (addr) => {
+          if (addr.isDefualt && addr.addressId !== addressId) {
+            const resetData = {
+              ...addr,
               userId: userId,
-              addressId: addr.addressId,
-              isDefualt: false,
-              name: addr.name,
-              mobile: addr.mobile,
-              email: addr.email,
-              streetAddress: addr.streetAddress,
-              state: addr.state,
-              city: addr.city,
-              pincode: addr.pincode,
-              country: addr.country,
+              isDefualt: false
             };
-            const test =await dispatch(updateAddress(data)).unwrap();
-            console.log("MMM",test);
+            await dispatch(updateAddress(resetData)).unwrap();
           }
         })
       );
 
       // Set the selected address as default
-      const addressToUpdate = addressData.find(
-        (addr) => addr.addressId === addressId
-      );
+      const data = {
+        ...addressToUpdate,
+        userId: userId,
+        isDefualt: true
+      };
 
-      if (addressToUpdate) {
-        const data = {
-          userId: userId,
-          addressId: addressId,
-          isDefualt: true,
-          name: addressToUpdate.name,
-          mobile: addressToUpdate.mobile,
-          email: addressToUpdate.email,
-          streetAddress: addressToUpdate.streetAddress,
-          state: addressToUpdate.state,
-          city: addressToUpdate.city,
-          pincode: addressToUpdate.pincode,
-          country: addressToUpdate.country,
-        };
-
-        const response = await dispatch(updateAddress(data)).unwrap();
-        if (response.statusCode === 200) {
-          Toast.show({
-            type: "success",
-            text1: response.message,
-          });
-        }
+      const response = await dispatch(updateAddress(data)).unwrap();
+      
+      if (response.statusCode === 200) {
+        Toast.show({
+          type: "success",
+          text1: response.message || "Address updated successfully",
+        });
         await dispatch(fetchAddress());
         setSelectedAddressId(addressId);
+      } else {
+        throw new Error(response.message || "Failed to update address");
       }
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: "Failed to update default address",
+        text1: error.message || "Failed to update default address",
       });
+    } finally {
+      setLoading(false);
     }
   };
 

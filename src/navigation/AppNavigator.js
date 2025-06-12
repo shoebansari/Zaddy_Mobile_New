@@ -15,6 +15,16 @@ import CartScreen from '../screens/CartScreen/CartScreen';
 import ProductsScreen from '../screens/ProductsScreen';
 import ProductDetailsScreen from '../screens/ProductDetailsScreen/ProductDetailsScreen';
 import ShippingScreen from '../screens/ShippingScreen/ShippingScreen';
+import OrderSuccessfullScreen from '../screens/OrderSuccessfullScreen/OrderScuccessfullScreen';
+import EditUserDetailsScreen from '../screens/EditUserDetailsScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
+import AddressListScreen from '../screens/AddressListScreen';
+import OrderHistoryScreen from '../screens/OrderHistoryScreen';
+import AddAddressScreen from '../screens/AddAddressScreen';
+import OrderDetailsScreen from '../screens/OrderDetailsScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import VerifyOtpScreen from '../screens/VerifyOtpScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +38,7 @@ const AppNavigator = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          contentStyle: { backgroundColor: '#FFFFFF' },
         }}
       >
         <Stack.Screen name="Tab" component={BottomTabNavigator} />
@@ -43,6 +54,17 @@ const AppNavigator = () => {
         <Stack.Screen name="ProductsScreen" component={ProductsScreen} />
         <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
         <Stack.Screen name="ShippingScreen" component={ShippingScreen} />
+        <Stack.Screen name="OrderSuccessfullScreen" component={OrderSuccessfullScreen} />
+        <Stack.Screen name="EditUserDetails" component={EditUserDetailsScreen} />
+        <Stack.Screen name="UserProfile" component={UserProfileScreen} />
+        <Stack.Screen name="AddressList" component={AddressListScreen} />
+        <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
+        <Stack.Screen name="AddAddress" component={AddAddressScreen} />
+        <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen name="VerifyOtp" component={VerifyOtpScreen} />
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+
         {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
       </Stack.Navigator>
     </View>
