@@ -103,7 +103,7 @@ const OrderSuccessfullScreen = () => {
           {/* Continue Shopping Button */}
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('Tab')}
           >
             <Text style={styles.buttonText}>Continue Shopping</Text>
           </TouchableOpacity>

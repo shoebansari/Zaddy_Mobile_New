@@ -10,6 +10,7 @@ export default function SignInScreen() {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
+  const [authError, setAuthError] = useState('');
   const navigation = useNavigation();
 
   const validate = () => {
@@ -37,14 +38,21 @@ export default function SignInScreen() {
   };
 
   const onSubmit = () => {
+    setAuthError(''); // Clear any previous auth error
     if (validate()) {
       dispatch(onLogin({ username, password }))
         .unwrap()
         .then((res) => {
-          navigation.navigate("Cart");
+          console.log("Login Success:", res);
+          if(res.isAuthenticated){
+            navigation.navigate("Cart");
+          } else {
+            setAuthError('Invalid username or password');
+          }
         })
         .catch((err) => {
           console.log("Login Failed:", err);
+          setAuthError('Invalid username or password');
         });
     }
   };
@@ -64,10 +72,13 @@ export default function SignInScreen() {
 
             <Text style={styles.label}>User Name</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, errors.username && styles.inputError]}
               placeholder="Enter Username"
               value={username}
-              onChangeText={setUsername}
+              onChangeText={(text) => {
+                setUsername(text);
+                setAuthError(''); // Clear auth error when user types
+              }}
               autoCapitalize="none"
             />
             {errors.username && (
@@ -76,11 +87,14 @@ export default function SignInScreen() {
 
             <Text style={styles.label}>Password</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, errors.password && styles.inputError]}
               placeholder="Password"
               secureTextEntry
               value={password}
-              onChangeText={setPassword}
+              onChangeText={(text) => {
+                setPassword(text);
+                setAuthError(''); // Clear auth error when user types
+              }}
               autoCapitalize="none"
             />
             {errors.password && (
@@ -93,6 +107,10 @@ export default function SignInScreen() {
             >
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
+
+            {authError ? (
+              <Text style={[styles.errorText, styles.authErrorText]}>{authError}</Text>
+            ) : null}
 
             <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
               <Text style={styles.signInText}>Don't Have An Account? Sign Up</Text>

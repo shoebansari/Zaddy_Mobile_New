@@ -65,7 +65,15 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 4,
     marginBottom: 8,
-  }
+  },
+  authErrorText: {
+    textAlign: 'center',
+    marginTop: 10,
+    marginBottom: 15,
+    fontSize: 14,
+    color: '#ff0000',
+    fontWeight: '500',
+  },
 });
 
 export default styles;

@@ -14,9 +14,6 @@ export default function Header() {
   const navigation = useNavigation();
   const loginDetail = useSelector((state) => state?.loginSlice);
   const user = loginDetail?.user ?? null;
-
-  console.log(user);
-  console.log('loginDetail==>',loginDetail);
   const inputRef = useRef(null);
   const containerRef = useRef(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -34,15 +31,15 @@ export default function Header() {
   const handleLogoPress = () => {
     // List of screens that are not in the tab navigator
     const nonTabScreens = ['ShippingScreen','ProductDetails', 'ProductsScreen', 'Cart','OrderSuccessfullScreen','ProductDetails '];
-    
+    console.log('currentRoute==>',currentRoute);
     const isInNonTabScreen = currentRoute && nonTabScreens.includes(currentRoute);
-
-    if (isInNonTabScreen) {
+    
+    if (currentRoute=='Tab') {
       // If we're in a non-tab screen, navigate to Tab
-      navigation.navigate('Tab');
+     navigation.navigate('Home');
     } else {
       // If we're in the tab navigator or state is not available, navigate to Home tab
-      navigation.navigate('Home');
+      navigation.navigate('Tab');
     }
   };
 
@@ -86,6 +83,7 @@ export default function Header() {
     await AsyncStorage.removeItem('token');
     dispatch(logout());
     setDropdownVisible(false);
+    navigation.navigate('Tab');
   };
 
   const calculateTotal = () => {

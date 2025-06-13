@@ -20,12 +20,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { addAddress, fetchAddress, updateAddress, } from "../../redux/slices/addressSlice";
 import { getUserId } from "../../api/auth";
 import { addOrderWithDetails } from "../../redux/slices/orderSlice";
-import { v4 as uuidv4 } from "uuid";
+import { generateTransactionId, generateTrackingNumber } from "../../utils/transactionUtils";
 import { fetchCountries, fetchStates, fetchCities } from "../../redux/slices/geographySlice";
 import { fetchPaymentMode } from "../../redux/slices/paymentSlice";
 import Coupon from "../../components/Coupon";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from "./ShippingStyle";
+import { emitCartUpdate } from '../../utils/emitCartUpdate';
 
 const { width } = Dimensions.get('window');
 
@@ -355,8 +356,8 @@ const validCartItems = items.filter(item => item.productId);
         extraCharge: 0,
         totalAmount: totalAmount - discount,
         paymentMethod: paymentMode === "cod" ? "Cash on Delivery" : onlineMethod.paymentName,
-        transactionId: `TXN-${uuidv4().slice(0, 8)}`,
-        trackingNo: `TRK-${uuidv4().slice(0, 8)}`,
+        transactionId: generateTransactionId(),
+        trackingNo: generateTrackingNumber(),
         note: "Urgent Delivery",
         status: "Order Successfully",
         createdBy: userId,
@@ -369,23 +370,34 @@ const validCartItems = items.filter(item => item.productId);
       const result = await dispatch(addOrderWithDetails(orderPayload)).unwrap();
 
       if (result.statusCode === 200) {
+        // Clear cart in AsyncStorage
+        await AsyncStorage.removeItem('cartItems');
+        // Clear local cart state
+        setItems([]);
+        // Emit cart update event
+        emitCartUpdate();
+        
         Toast.show({
           type: "success",
-          text1: result.message,
+          text1: "Order Placed Successfully!",
+          text2: "Your order has been placed successfully.",
+          visibilityTime: 3000,
         });
-        await AsyncStorage.removeItem('cartItems');
+        
         navigation.navigate("OrderSuccessfullScreen");
       } else {
         Toast.show({
           type: "error",
-          text1: result.message || "Order failed",
+          text1: "Order Failed",
+          text2: result.message || "Failed to place order",
         });
       }
     } catch (error) {
       console.error("Order error:", error);
       Toast.show({
         type: "error",
-        text1: error.message || "Failed to place order",
+        text1: "Order Failed",
+        text2: error.message || "Failed to place order",
       });
     } finally {
       setLoading(false);

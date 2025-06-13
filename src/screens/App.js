@@ -30,6 +30,7 @@ import AddAddressScreen from './src/screens/AddAddressScreen';
 import OrderDetailsScreen from './src/screens/OrderDetailsScreen';
 import OrderHistoryScreen from './src/screens/OrderHistoryScreen';
 import skinProducts from './src/components/skinProducts';
+import CameraScreen from './src/screens/CameraScreen/CameraScreen';
 const Stack = createNativeStackNavigator();
 
 function MainNavigator() {
@@ -72,8 +73,8 @@ function MainNavigator() {
         <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
         <Stack.Screen name="AddAddress" component={AddAddressScreen} />
         <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} />
-          <Stack.Screen name="skinProducts" component={skinProducts} />
-
+        <Stack.Screen name="skinProducts" component={skinProducts} />
+        <Stack.Screen name="CameraScreen" component={CameraScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

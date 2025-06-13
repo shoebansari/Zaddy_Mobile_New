@@ -1,11 +1,22 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const UserProfileScreen = () => {
   const navigation = useNavigation();
-  const route = useRoute();
-  const { username} = route.params || {};
+  const loginDetail = useSelector((state) => state?.loginSlice);
+  const user = loginDetail?.user ?? null;
+
+  const getInitials = (name) => {
+    if (!name) return 'U';
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   const MenuItem = ({ icon, title, subtitle, onPress }) => (
     <TouchableOpacity style={styles.menuItem} onPress={onPress}>
@@ -27,21 +38,30 @@ const UserProfileScreen = () => {
         <TouchableOpacity onPress={() => navigation.navigate('EditUserDetails')}>
           <View style={styles.profile}>
             <View style={styles.avatar}>
-              <Text style={styles.avatarText}>TA</Text>
+              <Text style={styles.avatarText}>{getInitials(user?.firstName)}</Text>
             </View>
-            <View>
-              <Text style={styles.userName}>Hello {username || 'User'},</Text>
-              <Text style={styles.userEmail}>{username ? `${username}@example.com` : 'email@example.com'}</Text>
+            <View style={styles.userInfo}>
+              <Text style={styles.userName}>Hello {user?.firstName || 'User'}</Text>
+              <Text style={styles.userEmail}>{user?.email || 'No email provided'}</Text>
+              <Text style={styles.userGender}>{user?.gender || 'Gender not specified'}</Text>
             </View>
           </View>
           <View style={styles.divider} />
         </TouchableOpacity>
 
         {/* Menu Items */}
-        <MenuItem icon="location-outline" title="Address Book" subtitle="Manage your saved addresses" 
-          onPress={() => navigation.navigate('AddressList')}/>
-        <MenuItem icon="time-outline" title="Order History" subtitle="View your past orders"
-        onPress={() => navigation.navigate('OrderHistory')} />   
+        <MenuItem 
+          icon="location-outline" 
+          title="Address Book" 
+          subtitle="Manage your saved addresses" 
+          onPress={() => navigation.navigate('AddressList')}
+        />
+        <MenuItem 
+          icon="time-outline" 
+          title="Order History" 
+          subtitle="View your past orders"
+          onPress={() => navigation.navigate('OrderHistory')} 
+        />   
       </ScrollView>
     </SafeAreaView>
   );
@@ -55,7 +75,7 @@ const styles = StyleSheet.create({
   profile: {
     flexDirection: 'row',
     padding: 16,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   avatar: {
     backgroundColor: '#000',
@@ -71,13 +91,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  userInfo: {
+    flex: 1,
+  },
   userName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
+    marginBottom: 4,
+    color: '#333',
   },
   userEmail: {
     fontSize: 14,
-    color: '#555',
+    color: '#666',
+    marginBottom: 4,
+  },
+  userGender: {
+    fontSize: 14,
+    color: '#666',
   },
   menuItem: {
     flexDirection: 'row',
@@ -101,7 +131,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#ccc',
+    backgroundColor: '#eee',
     marginBottom: 10,
   }
 });

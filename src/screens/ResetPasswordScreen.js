@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#000',
     width: '100%',
     height: 50,
     borderRadius: 8,

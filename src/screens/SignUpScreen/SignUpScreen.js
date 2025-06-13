@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, SafeAreaView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import styles from './SignUpStyle';
 import { onRegister } from '../../redux/slices/signupSlice';
+import Toast from 'react-native-toast-message';
 
 export default function SignUpScreen({ navigation }) {
   const dispatch = useDispatch();
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
@@ -23,14 +25,43 @@ export default function SignUpScreen({ navigation }) {
     dispatch(onRegister(values))
       .unwrap()
       .then((res) => {
-        Alert.alert("Account Created Successfully!");
-        navigation.replace('Tab');
+        setIsSuccess(true);
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Account created successfully!',
+          visibilityTime: 3000,
+          autoHide: true,
+        });
       })
       .catch((err) => {
-        Alert.alert("Registration Failed. Please try again.");
+        Toast.show({
+          type: 'error',
+          text1: 'Registration Failed',
+          text2: 'Please try again.',
+          visibilityTime: 3000,
+          autoHide: true,
+        });
       })
       .finally(() => setSubmitting(false));
   };
+
+  if (isSuccess) {
+    return (
+      <SafeAreaView style={styles.mainContainer}>
+        <View style={styles.successContainer}>
+          <Text style={styles.successTitle}>Account Created Successfully!</Text>
+          <Text style={styles.successMessage}>Your account has been created. You can now start exploring our app.</Text>
+          <TouchableOpacity 
+            style={styles.goHomeButton}
+            onPress={() => navigation.navigate('Tab')}
+          >
+            <Text style={styles.goHomeButtonText}>Go to Home</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.mainContainer}>

@@ -80,6 +80,43 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
+  successContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  successTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2ecc71',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  successMessage: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 32,
+    lineHeight: 24,
+  },
+  goHomeButton: {
+    backgroundColor: '#2ecc71',
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 25,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  goHomeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
 });
 
 export default styles;
