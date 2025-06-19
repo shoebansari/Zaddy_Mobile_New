@@ -1,9 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { postRequestWithToken } from '../../api/auth';
 
-export const onLogin = createAsyncThunk('signIn/onLogin', async (body) => {
-  const res = await postRequestWithToken('/Authentication/appLogin', body);
+export const onLogin = createAsyncThunk("signIn/onLogin", async (body) => {
+  const res = await postRequestWithToken("/Authentication/appLogin", body);
   if (res.statusCode === 200) {
     await AsyncStorage.setItem('loginDetails', JSON.stringify(res.data));
     await AsyncStorage.setItem('token', res.token);
@@ -79,5 +79,5 @@ export const signInSlice = createSlice({
   },
 });
 
-export const { logout } = signInSlice.actions;
 export default signInSlice.reducer;
+export const { logout } = signInSlice.actions;
