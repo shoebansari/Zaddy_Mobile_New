@@ -31,7 +31,7 @@ import resetPasswordReducer from './slices/resetPasswordSlice';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user'] // Add reducer names you want to persist
+  whitelist: ['loginSlice'] 
 };
 
 const rootReducer = combineReducers({
@@ -44,7 +44,7 @@ const rootReducer = combineReducers({
   forgotPasswordSlice: forgotPasswordReducer,
   filterSlice: filterReducer,
   trackOrderSlice: trackOrderReducer,
-  loginSlice: signInReducer,
+  loginSlice: signInReducer,  
   signUpSlice: signUpReducer,
   varifyOtpSlice: varifyOtpReducer,
   cartSlice: cartReducer,
