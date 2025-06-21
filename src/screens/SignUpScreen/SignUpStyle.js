@@ -117,6 +117,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
+
+  passwordWrapper: {
+    position: 'relative',
+  },
+
+  eyeIconWrapper: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }], // To align the icon vertically
+  },
+
+  eyeIcon: {
+    fontSize: 24,
+    color: '#777',
+  },
 });
 
 export default styles;
