@@ -7,7 +7,6 @@ import HomeScreen from '../screens/HomeScreen';
 import CollectionScreen from '../screens/CollectionScreen';
 import SkinInsightScreen from '../screens/SkinInsightScreen';
 import AccountScreen from '../screens/AccountScreen';
-import UserProfileScreen from '../screens/UserProfileScreen';
 
 const Tab = createBottomTabNavigator();
 

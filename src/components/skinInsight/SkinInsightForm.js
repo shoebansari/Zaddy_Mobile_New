@@ -49,23 +49,24 @@ const SkinCareInsightForm = () => {
   };
 
   const handleSubmit = () => {
-    const newErrors = {};
-    if (!name.trim()) newErrors.name = 'Name is required';
-    if (!age) newErrors.age = 'Please select your age group';
-    if (!gender) newErrors.gender = 'Please select your gender';
-    if (!skintype) newErrors.skintype = 'Please select your skin type';
-    if (skinSensitive === '') newErrors.skinSensitive = 'Please choose sensitivity option';
+    navigation.navigate('CameraScreen');
+    // const newErrors = {};
+    // if (!name.trim()) newErrors.name = 'Name is required';
+    // if (!age) newErrors.age = 'Please select your age group';
+    // if (!gender) newErrors.gender = 'Please select your gender';
+    // if (!skintype) newErrors.skintype = 'Please select your skin type';
+    // if (skinSensitive === '') newErrors.skinSensitive = 'Please choose sensitivity option';
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+    // if (Object.keys(newErrors).length > 0) {
+    //   setErrors(newErrors);
+    //   return;
+    // }
 
-    setErrors({});
-    dispatch(postSkincareForm(formData))
-      .then(() => {
-        navigation.navigate('CameraScreen');
-      });
+    // setErrors({});
+    // dispatch(postSkincareForm(formData))
+    //   .then(() => {
+    //     navigation.navigate('CameraScreen');
+    //   });
   };
 
   return (

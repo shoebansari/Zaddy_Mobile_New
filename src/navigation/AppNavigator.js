@@ -27,6 +27,7 @@ import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import VerifyOtpScreen from '../screens/VerifyOtpScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import CameraScreen from '../screens/CameraScreen/CameraScreen';
+import RecommendedScreen from '../screens/RecommendedScreen/RecommendedScreen';
 
 const Stack = createStackNavigator();
 
@@ -67,6 +68,7 @@ const AppNavigator = () => {
         <Stack.Screen name="VerifyOtp" component={VerifyOtpScreen} />
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
         <Stack.Screen name="CameraScreen" component={CameraScreen} />
+        <Stack.Screen name="RecommendedScreen" component={RecommendedScreen} />
 
         {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
       </Stack.Navigator>

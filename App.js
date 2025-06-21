@@ -7,14 +7,22 @@ import { store, persistor } from './src/redux/store';
 import Toast from 'react-native-toast-message';
 import AppNavigator from './src/navigation/AppNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View } from 'react-native';
+
+const linking = {
+  prefixes: ['zaddymobile://'],
+  config: {
+    screens: {
+      RecommendedScreen: 'face-scan-finished',
+    },
+  },
+};
 
 export default function App() {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             <StatusBar style="dark" backgroundColor="#FFFFFF" />
             <AppNavigator />
             <Toast />
